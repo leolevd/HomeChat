@@ -1,4 +1,5 @@
 import fastapi
+import socket
 import fastapi.responses
 import uvicorn
 app = fastapi.FastAPI()
@@ -32,4 +33,4 @@ def addasmile(smilename: str, smilepic: str):
     from makeasmile import makeasmile
     makeasmile(":" + smilename, smilepic)
     return fastapi.responses.RedirectResponse("/", status_code=302)
-uvicorn.run(app=app, host="192.168.1.196", port=5000)
+uvicorn.run(app=app, host=f"{socket.gethostbyname(socket.gethostname())}", port=5000)
