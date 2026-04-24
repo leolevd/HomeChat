@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="EN-US">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>HomeChat</title>
+<style>
+div#chat {
+    color: white;
+    background: black;
+    border: 3px white dotted;
+    width: 100%;
+
+    max-height: 80vh;
+    overflow-y: auto;
+    padding: 10px;
+}
+div#smiliki {
+    font-size: 18px;
+    display: table;
+    max-width: 350px;
+}
+div#smiliki > span#icon {
+    font-size: 25px;
+}
+div#smiliki:hover > span:not(#icon) {
+    visibility: visible;
+}
+div#smiliki > span:not(#icon) {
+    visibility: hidden;
+    cursor: pointer;
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none;    /* Firefox */
+    -ms-user-select: none;     /* IE10+ */
+    user-select: none;         /* Standard */
+}
+div#smiliki > span:hover:not(#icon) {
+    background-color: aqua;
+    font-size: 25px;
+}
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: black;
+    max-height: 80vh;
+    padding-bottom: 100px;
+}
+#writemsg  {
+    display: flex;
+    bottom: 10px;
+    position: fixed;
+}
+
+
+input#nameInput {
+    width: 100px;
+}
+</style>
+</head>
+<body>
+    <div id="chat"></div>
+    <div id="writemsg">
+        <form id="chatForm" action="/writemsg" method="get">
+            <input type="text" id="nameInput" name="Blame" placeholder="Your name" required>
+            <input type="text" name="abracadabra" required id="hello" autocomplete="off"></input>
+            <button>Send</button>
+        </form>
+        <div id="smiliki">
+            <span id="icon">😀</span>
+            <span aria-valuenow=":heart">❤️</span>
+            <span aria-valuenow=":smile">😀</span>
+            <span aria-valuenow=":sad">😢</span>
+            <span aria-valuenow=":food">🍔</span>
+            <span aria-valuenow=":phoenix">🐦‍🔥</span>
+            <span aria-valuenow=":fire">🔥</span>
+            <span aria-valuenow=":clouds">😶‍🌫️</span>
+            <span aria-valuenow=":crying">😭</span>
+            <span aria-valuenow=":glad">☺️</span>
+            <span aria-valuenow=":insane">😈</span>
+            <span aria-valuenow=":laptop">💻</span>
+            <span aria-valuenow=":book">📖</span>
+
+        </div>
+
+    </div>
+    <script>
+        // Restore name from localStorage
+        document.getElementById('nameInput').value = localStorage.getItem('chatName') || '';
+
+        // Save name to localStorage on input
+        document.getElementById('nameInput').addEventListener('input', function() {
+            localStorage.setItem('chatName', this.value);
+        });
+
+        async function getChatHistory() {
+            try {
+                let response = await fetch("/chathistory");
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                let text = await response.text();
+                // format \n to <br> & add smiles
+                let formattedText = text.replace(/\\n/g, "<br>").replace(/\"/g, "").replace(/:smile/g, "😀").replace(/:food/g, "🍔").replace(/:laptop/g, "💻").replace(/:book/g, "📖").replace(/:sad/g, "😢").replace(/:insane/g, "😈").replace(/:crying/g, "😭").replace(/:clouds/g, "😶‍🌫️").replace(/:glad/g, "☺️").replace(/:fire/g, "🔥").replace(/:phoenix/g, "🐦‍🔥").replace(/:heart/g, "❤️")
+                let chathistory = document.getElementById("chat");
+                chathistory.innerHTML = `${formattedText}`;
+                chathistory.scrollTop = chathistory.scrollHeight;
+            } catch (error) {
+                console.error('Ошибка при запросе:', error);
+                document.getElementById('chat').textContent = 'Не удалось загрузить данные.';
+            }
+        }
+        getChatHistory()
+        setInterval(getChatHistory, 2500)
+    </script>
+    <script>
+        document.querySelector("input#hello").focus()
+    </script>
+    <script>
+        for (elem of document.querySelectorAll("div#smiliki > span")) {
+            elem.addEventListener("click", function() {
+                document.querySelector("#hello").value += this.getAttribute("aria-valuenow")
+                document.querySelector("#hello").focus()
+        })
+        }
+
+    </script>
+
+</body>
+</html>

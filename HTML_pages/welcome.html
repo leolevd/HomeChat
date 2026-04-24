@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="EN-US">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+
+    <title>HomeChat</title>
+    <style>
+        div#chat {
+            color: white;
+            background: black;
+            border: 3px white dotted;
+            width: 100%;
+
+            max-height: 80vh;
+            overflow-y: auto;
+            padding: 10px;
+        }
+
+        div#smiliki {
+            font-size: 18px;
+            display: table;
+            max-width: 350px;
+        }
+
+        div#smiliki>span#icon {
+            font-size: 25px;
+        }
+
+        div.msgdiv {
+            background-color: darkslategray;
+            color: aliceblue;
+            padding: 10px;
+            box-shadow: 0px, 0px, 10px, 8px azure;
+            margin-top: 10px;
+        }
+
+        div#smiliki:hover>span:not(#icon) {
+            visibility: visible;
+        }
+
+        div#smiliki>span:not(#icon) {
+            visibility: hidden;
+            cursor: pointer;
+            -webkit-user-select: none;
+            /* Safari */
+            -moz-user-select: none;
+            /* Firefox */
+            -ms-user-select: none;
+            /* IE10+ */
+            user-select: none;
+            /* Standard */
+        }
+
+        div#smiliki>span:hover:not(#icon) {
+            background-color: aqua;
+            font-size: 25px;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: black;
+            max-height: 80vh;
+            padding-bottom: 100px;
+        }
+
+        #writemsg {
+            display: flex;
+            bottom: 10px;
+            position: fixed;
+        }
+
+
+        input#nameInput {
+            width: 100px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="chat"></div>
+    <audio style="display: none;">
+        <source src="/ding" type="audio/wav">
+    </audio>
+    <div id="writemsg">
+        <form id="chatForm" action="/writemsg" method="get">
+            <input type="text" id="nameInput" name="Blame" placeholder="Your name" required>
+            <input type="text" name="abracadabra" required id="hello" autocomplete="off"></input>
+            <button>Send</button>
+        </form>
+        <div id="smiliki">
+            <span id="icon">😀</span>
+            <span aria-valuenow=":smilehearts">🥰</span>
+            <span aria-valuenow=":congratulations">🎉</span>
+            <span aria-valuenow=":cool">😎</span>
+            <span aria-valuenow=":laughing">🤣</span>
+            <span aria-valuenow=":heart">❤️</span>
+            <span aria-valuenow=":smile">😀</span>
+            <span aria-valuenow=":sad">😢</span>
+            <span aria-valuenow=":food">🍔</span>
+            <span aria-valuenow=":phoenix">🐦‍🔥</span>
+            <span aria-valuenow=":fire">🔥</span>
+            <span aria-valuenow=":clouds">😶‍🌫️</span>
+            <span aria-valuenow=":crying">😭</span>
+            <span aria-valuenow=":glad">☺️</span>
+            <span aria-valuenow=":insane">😈</span>
+            <span aria-valuenow=":laptop">💻</span>
+            <span aria-valuenow=":book">📖</span>
+
+        </div>
+
+    </div>
+    <script>
+        document.body.addEventListener("click", function unlockAudio() {
+            // создаём крошечный звуковой объект
+            let silent = new Audio("data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAIA+AAACABAAZGF0YQAAAAA=");
+            silent.volume = 0; // на всякий случай
+            silent.play().catch(() => { });
+            // убираем обработчик, чтобы не мучить юзера дальше
+            document.body.removeEventListener("click", unlockAudio);
+        });
+    </script>
+
+    <script>
+
+        // Restore name from localStorage
+        document.getElementById('nameInput').value = localStorage.getItem('chatName') || '';
+
+        // Save name to localStorage on input
+        document.getElementById('nameInput').addEventListener('input', function () {
+            localStorage.setItem('chatName', this.value);
+        });
+
+        function notify() {
+
+            let audio = document.querySelector("audio")
+            audio.querySelector("source").src = "/ding?r=" + Date.now()
+            audio.load()
+            audio.play()
+
+        }
+        let lastIndex = 0;
+        async function getChatHistory() {
+            try {
+                let response = await fetch("/chathistory");
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                let text = await response.text();
+
+                let array = text.split("\\n")
+                let chathistory = document.getElementById("chat");
+
+                if (lastIndex != array.length) {
+                    chathistory.innerHTML = ""
+                    if (lastIndex != 0) {
+                        notify()
+                    }
+                    array.forEach(element => {
+                        let formattedElement = element.replace(/\"/g, "").replace(/:smile/g, "😀").replace(/:food/g, "🍔").replace(/:laptop/g, "💻").replace(/:book/g, "📖").replace(/:sad/g, "😢").replace(/:insane/g, "😈").replace(/:crying/g, "😭").replace(/:clouds/g, "😶‍🌫️").replace(/:glad/g, "☺️").replace(/:fire/g, "🔥").replace(/:phoenix/g, "🐦‍🔥").replace(/:heart/g, "❤️").replace(/:laughing/g, "🤣").replace(/:smilehearts/g, "🥰").replace(/:cool/g, "😎").replace(/:congratulations/g, "🎉")
+                        if (formattedElement) {
+                            let msgdiv = document.createElement("div")
+                            msgdiv.className = "msgdiv"
+                            msgdiv.innerHTML = formattedElement
+                            chathistory.appendChild(msgdiv)
+                        }
+                    });
+                    chathistory.scrollTop = chathistory.scrollHeight;
+
+                }
+
+
+                lastIndex = array.length
+            } catch (error) {
+                console.error('Ошибка при запросе:', error);
+                document.getElementById('chat').textContent = 'Не удалось загрузить данные.';
+            }
+        }
+        getChatHistory()
+        setInterval(getChatHistory, 2500)
+    </script>
+    <script>
+        document.querySelector("input#hello").focus()
+    </script>
+    <script>
+        for (elem of document.querySelectorAll("div#smiliki > span")) {
+            elem.addEventListener("click", function () {
+                document.querySelector("#hello").value += this.getAttribute("aria-valuenow")
+                document.querySelector("#hello").focus()
+            })
+        }
+
+
+    </script>
+
+</body>
+
+</html>
