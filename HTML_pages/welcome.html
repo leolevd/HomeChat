@@ -177,6 +177,7 @@
         <div id="smiliki">
             <span id="icon">😀</span>
             <div id="emojiList">
+            <span aria-valuenow=":robobobo">🤖</span>
                 <span aria-valuenow=":smilehearts">🥰</span>
                 <span aria-valuenow=":congratulations">🎉</span>
                 <span aria-valuenow=":cool">😎</span>
@@ -244,7 +245,7 @@
                         notify()
                     }
                     array.forEach(element => {
-                        let formattedElement = element.replace(/\"/g, "").replace(/:smile/g, "😀").replace(/:food/g, "🍔").replace(/:laptop/g, "💻").replace(/:book/g, "📖").replace(/:sad/g, "😢").replace(/:insane/g, "😈").replace(/:crying/g, "😭").replace(/:clouds/g, "😶‍🌫️").replace(/:glad/g, "☺️").replace(/:fire/g, "🔥").replace(/:phoenix/g, "🐦‍🔥").replace(/:heart/g, "❤️").replace(/:laughing/g, "🤣").replace(/:smilehearts/g, "🥰").replace(/:cool/g, "😎").replace(/:congratulations/g, "🎉")
+                        let formattedElement = element.replace(/\"/g, "").replace(/:smile/g, "😀").replace(/:food/g, "🍔").replace(/:laptop/g, "💻").replace(/:book/g, "📖").replace(/:sad/g, "😢").replace(/:insane/g, "😈").replace(/:crying/g, "😭").replace(/:clouds/g, "😶‍🌫️").replace(/:glad/g, "☺️").replace(/:fire/g, "🔥").replace(/:phoenix/g, "🐦‍🔥").replace(/:heart/g, "❤️").replace(/:laughing/g, "🤣").replace(/:smilehearts/g, "🥰").replace(/:cool/g, "😎").replace(/:congratulations/g, "🎉").replace(/:robobobo/g, "🤖")
                         if (formattedElement) {
                             let msgdiv = document.createElement("div")
                             msgdiv.className = "msgdiv"
