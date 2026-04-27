@@ -8,75 +8,168 @@
 
     <title>HomeChat</title>
     <style>
-        div#chat {
-            color: white;
-            background: black;
-            border: 3px white dotted;
-            width: 100%;
+        :root {
+            --bg-main: #0f111a;
+            --bg-card: #171a26;
+            --bg-card-soft: #1e2233;
+            --text-main: #f2f4ff;
+            --text-muted: #adb5d9;
+            --accent: #6ea8fe;
+            --accent-2: #71f5c7;
+            --border: #2a3351;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+        }
 
+        div#chat {
+            color: var(--text-main);
+            background: linear-gradient(180deg, #111523 0%, #0d111d 100%);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            width: min(900px, 94vw);
             max-height: 80vh;
             overflow-y: auto;
-            padding: 10px;
+            padding: 14px;
+            box-shadow: var(--shadow);
         }
 
         div#smiliki {
             font-size: 18px;
-            display: table;
-            max-width: 350px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            min-width: 50px;
+            min-height: 42px;
+            padding: 6px 10px;
+            border-radius: 12px;
+            background: var(--bg-card-soft);
+            border: 1px solid var(--border);
         }
 
         div#smiliki>span#icon {
             font-size: 25px;
+            cursor: pointer;
+            user-select: none;
         }
 
         div.msgdiv {
-            background-color: darkslategray;
-            color: aliceblue;
+            background-color: var(--bg-card-soft);
+            color: var(--text-main);
             padding: 10px;
-            box-shadow: 0px, 0px, 10px, 8px azure;
+            border-radius: 10px;
+            border: 1px solid var(--border);
             margin-top: 10px;
         }
 
-        div#smiliki:hover>span:not(#icon) {
-            visibility: visible;
+        div#emojiList {
+            position: absolute;
+            right: 0;
+            bottom: 100%;
+            width: min(330px, 80vw);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            padding: 10px;
+            border-radius: 12px;
+            background: rgba(18, 24, 39, 0.95);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            opacity: 0;
+            transform: translateY(6px);
+            pointer-events: none;
+            transition: opacity 0.18s ease, transform 0.18s ease;
         }
 
-        div#smiliki>span:not(#icon) {
-            visibility: hidden;
+        div#emojiList::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 100%;
+            height: 10px;
+        }
+
+        div#smiliki:hover #emojiList,
+        div#smiliki:focus-within #emojiList {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        div#emojiList>span {
             cursor: pointer;
+            padding: 4px 6px;
             -webkit-user-select: none;
-            /* Safari */
             -moz-user-select: none;
-            /* Firefox */
             -ms-user-select: none;
-            /* IE10+ */
             user-select: none;
-            /* Standard */
         }
 
-        div#smiliki>span:hover:not(#icon) {
-            background-color: aqua;
-            font-size: 25px;
+        div#emojiList>span:hover {
+            background-color: rgba(110, 168, 254, 0.24);
+            border-radius: 8px;
+            transform: translateY(-1px);
         }
 
         body {
             display: flex;
             flex-direction: column;
             align-items: center;
-            background-color: black;
+            background: radial-gradient(1200px circle at top, #1b2340 0%, var(--bg-main) 45%, #090b12 100%);
+            color: var(--text-main);
             max-height: 80vh;
+            min-height: 100vh;
+            margin: 0;
+            padding-top: 18px;
             padding-bottom: 100px;
+            font-family: "Segoe UI", Roboto, Arial, sans-serif;
         }
 
         #writemsg {
             display: flex;
+            gap: 10px;
+            align-items: center;
             bottom: 10px;
             position: fixed;
+            background: rgba(14, 17, 27, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 10px;
+            box-shadow: var(--shadow);
         }
 
 
         input#nameInput {
-            width: 100px;
+            width: 130px;
+        }
+
+        #chatForm {
+            display: flex;
+            gap: 8px;
+        }
+
+        #chatForm input,
+        #chatForm button {
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: var(--bg-card);
+            color: var(--text-main);
+            padding: 8px 10px;
+        }
+
+        #chatForm input#hello {
+            width: min(48vw, 520px);
+        }
+
+        #chatForm button {
+            background: linear-gradient(135deg, var(--accent), var(--accent-2));
+            color: #0b1020;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        #chatForm button:hover {
+            filter: brightness(1.06);
         }
     </style>
 </head>
@@ -94,23 +187,24 @@
         </form>
         <div id="smiliki">
             <span id="icon">😀</span>
-            <span aria-valuenow=":smilehearts">🥰</span>
-            <span aria-valuenow=":congratulations">🎉</span>
-            <span aria-valuenow=":cool">😎</span>
-            <span aria-valuenow=":laughing">🤣</span>
-            <span aria-valuenow=":heart">❤️</span>
-            <span aria-valuenow=":smile">😀</span>
-            <span aria-valuenow=":sad">😢</span>
-            <span aria-valuenow=":food">🍔</span>
-            <span aria-valuenow=":phoenix">🐦‍🔥</span>
-            <span aria-valuenow=":fire">🔥</span>
-            <span aria-valuenow=":clouds">😶‍🌫️</span>
-            <span aria-valuenow=":crying">😭</span>
-            <span aria-valuenow=":glad">☺️</span>
-            <span aria-valuenow=":insane">😈</span>
-            <span aria-valuenow=":laptop">💻</span>
-            <span aria-valuenow=":book">📖</span>
-
+            <div id="emojiList">
+                <span aria-valuenow=":smilehearts">🥰</span>
+                <span aria-valuenow=":congratulations">🎉</span>
+                <span aria-valuenow=":cool">😎</span>
+                <span aria-valuenow=":laughing">🤣</span>
+                <span aria-valuenow=":heart">❤️</span>
+                <span aria-valuenow=":smile">😀</span>
+                <span aria-valuenow=":sad">😢</span>
+                <span aria-valuenow=":food">🍔</span>
+                <span aria-valuenow=":phoenix">🐦‍🔥</span>
+                <span aria-valuenow=":fire">🔥</span>
+                <span aria-valuenow=":clouds">😶‍🌫️</span>
+                <span aria-valuenow=":crying">😭</span>
+                <span aria-valuenow=":glad">☺️</span>
+                <span aria-valuenow=":insane">😈</span>
+                <span aria-valuenow=":laptop">💻</span>
+                <span aria-valuenow=":book">📖</span>
+            </div>
         </div>
 
     </div>
@@ -187,7 +281,7 @@
         document.querySelector("input#hello").focus()
     </script>
     <script>
-        for (elem of document.querySelectorAll("div#smiliki > span")) {
+        for (elem of document.querySelectorAll("#emojiList > span")) {
             elem.addEventListener("click", function () {
                 document.querySelector("#hello").value += this.getAttribute("aria-valuenow")
                 document.querySelector("#hello").focus()
