@@ -28,9 +28,6 @@ def write_message(Blame:str, abracadabra: str):
 @app.get("/smiles")
 def get_smiles():
     return fastapi.responses.FileResponse("HTML_pages/smiles.html")
-@app.get("/miles")
-def get_miles():
-    return fastapi.responses.FileResponse("HTML_pages/smiles.html")
 @app.get("/addasmile")
 def addasmile(smilename: str, smilepic: str):
     from makeasmile import makeasmile
