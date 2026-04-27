@@ -46,6 +46,8 @@
 
         div#smiliki>span#icon {
             font-size: 25px;
+            cursor: pointer;
+            user-select: none;
         }
 
         div.msgdiv {
@@ -57,21 +59,39 @@
             margin-top: 10px;
         }
 
-        div#smiliki:hover>span:not(#icon) {
-            visibility: visible;
+        div#emojiList {
+            position: absolute;
+            right: 0;
+            bottom: calc(100% + 8px);
+            width: min(330px, 80vw);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            padding: 10px;
+            border-radius: 12px;
+            background: rgba(18, 24, 39, 0.95);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            opacity: 0;
+            transform: translateY(6px);
+            pointer-events: none;
+            transition: opacity 0.18s ease, transform 0.18s ease;
         }
 
-        div#smiliki>span:not(#icon) {
-            visibility: hidden;
+        div#smiliki:hover #emojiList,
+        div#smiliki:focus-within #emojiList {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        div#emojiList>span {
             cursor: pointer;
+            padding: 4px 6px;
             -webkit-user-select: none;
-            /* Safari */
             -moz-user-select: none;
-            /* Firefox */
             -ms-user-select: none;
-            /* IE10+ */
             user-select: none;
-            /* Standard */
         }
 
         div#smiliki>span:hover:not(#icon) {
@@ -156,23 +176,24 @@
         </form>
         <div id="smiliki">
             <span id="icon">😀</span>
-            <span aria-valuenow=":smilehearts">🥰</span>
-            <span aria-valuenow=":congratulations">🎉</span>
-            <span aria-valuenow=":cool">😎</span>
-            <span aria-valuenow=":laughing">🤣</span>
-            <span aria-valuenow=":heart">❤️</span>
-            <span aria-valuenow=":smile">😀</span>
-            <span aria-valuenow=":sad">😢</span>
-            <span aria-valuenow=":food">🍔</span>
-            <span aria-valuenow=":phoenix">🐦‍🔥</span>
-            <span aria-valuenow=":fire">🔥</span>
-            <span aria-valuenow=":clouds">😶‍🌫️</span>
-            <span aria-valuenow=":crying">😭</span>
-            <span aria-valuenow=":glad">☺️</span>
-            <span aria-valuenow=":insane">😈</span>
-            <span aria-valuenow=":laptop">💻</span>
-            <span aria-valuenow=":book">📖</span>
-
+            <div id="emojiList">
+                <span aria-valuenow=":smilehearts">🥰</span>
+                <span aria-valuenow=":congratulations">🎉</span>
+                <span aria-valuenow=":cool">😎</span>
+                <span aria-valuenow=":laughing">🤣</span>
+                <span aria-valuenow=":heart">❤️</span>
+                <span aria-valuenow=":smile">😀</span>
+                <span aria-valuenow=":sad">😢</span>
+                <span aria-valuenow=":food">🍔</span>
+                <span aria-valuenow=":phoenix">🐦‍🔥</span>
+                <span aria-valuenow=":fire">🔥</span>
+                <span aria-valuenow=":clouds">😶‍🌫️</span>
+                <span aria-valuenow=":crying">😭</span>
+                <span aria-valuenow=":glad">☺️</span>
+                <span aria-valuenow=":insane">😈</span>
+                <span aria-valuenow=":laptop">💻</span>
+                <span aria-valuenow=":book">📖</span>
+            </div>
         </div>
 
     </div>
@@ -249,7 +270,7 @@
         document.querySelector("input#hello").focus()
     </script>
     <script>
-        for (elem of document.querySelectorAll("div#smiliki > span")) {
+        for (elem of document.querySelectorAll("#emojiList > span")) {
             elem.addEventListener("click", function () {
                 document.querySelector("#hello").value += this.getAttribute("aria-valuenow")
                 document.querySelector("#hello").focus()

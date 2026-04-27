@@ -1,29 +1,132 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-<style>
-body {
-    background: black;
-    color: white;
-    border: 3px red solid;
-    height: 100%;
-}
-p:smiles {
-    padding-top: 40%;
-}
-</style>
+    <title>HomeChat • Добавить смайлик</title>
+    <style>
+        :root {
+            --bg: #090c15;
+            --card: rgba(20, 25, 44, 0.85);
+            --card-2: rgba(31, 40, 69, 0.9);
+            --text: #f0f4ff;
+            --muted: #9eb2ff;
+            --accent: #76a6ff;
+            --accent-2: #7bffd4;
+            --border: #2b3c73;
+            --shadow: 0 20px 40px rgba(0, 0, 0, 0.42);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            margin: 0;
+            display: grid;
+            place-items: center;
+            background:
+                radial-gradient(1400px circle at 20% 0%, #1d2f68 0%, transparent 35%),
+                radial-gradient(900px circle at 90% 100%, #0d7a7d 0%, transparent 30%),
+                var(--bg);
+            color: var(--text);
+            font-family: "Segoe UI", Roboto, Arial, sans-serif;
+            padding: 22px;
+        }
+
+        .card {
+            width: min(640px, 100%);
+            background: linear-gradient(180deg, var(--card) 0%, var(--card-2) 100%);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            box-shadow: var(--shadow);
+            padding: 22px;
+            backdrop-filter: blur(6px);
+        }
+
+        h1 {
+            margin-top: 0;
+            margin-bottom: 8px;
+            font-size: clamp(1.5rem, 2.3vw, 2rem);
+        }
+
+        .subtitle {
+            color: var(--muted);
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+
+        #sf {
+            display: grid;
+            gap: 12px;
+        }
+
+        label {
+            font-weight: 600;
+            font-size: 0.96rem;
+        }
+
+        input {
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: rgba(9, 13, 28, 0.85);
+            color: var(--text);
+            font-size: 1rem;
+            padding: 11px 12px;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(118, 166, 255, 0.2);
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 8px;
+        }
+
+        button,
+        .secondary {
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 10px 14px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        button {
+            background: linear-gradient(135deg, var(--accent), var(--accent-2));
+            color: #09101e;
+        }
+
+        .secondary {
+            background: rgba(15, 19, 35, 0.95);
+            color: var(--text);
+        }
+    </style>
 </head>
+
 <body>
-    <h1>Добавить новый смайлик</h1>
-    <form action="/addasmile" method="get" id="sf">
-        <label for="input#sn">Имя самйлика. :</label>
-        <input type="text" name="smilename" id="sn" required>
-        <label for="input#sp">Картинка самйлика. Используйте win + .</label>
-        <input type="text" name="smilepic" id="sp" required>
-        <button type="submit">Add</button>
-    </form>
+    <main class="card">
+        <h1>Добавить новый смайлик</h1>
+        <p class="subtitle">Футуристичный редактор кастомных эмодзи для HomeChat 🚀</p>
+        <form action="/addasmile" method="get" id="sf">
+            <label for="sn">Имя смайлика (без двоеточий)</label>
+            <input type="text" name="smilename" id="sn" placeholder="например: robotdance" required>
+            <label for="sp">Картинка смайлика (вставь эмодзи, Win + .)</label>
+            <input type="text" name="smilepic" id="sp" placeholder="🤖" required>
+            <div class="actions">
+                <button type="submit">Добавить</button>
+                <a class="secondary" href="/">Назад в чат</a>
+            </div>
+        </form>
+    </main>
 </body>
+
 </html>
