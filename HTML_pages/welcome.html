@@ -36,10 +36,8 @@
             font-size: 18px;
             display: flex;
             align-items: center;
-            justify-content: center;
-            position: relative;
-            min-width: 50px;
-            min-height: 42px;
+            gap: 6px;
+            max-width: 380px;
             padding: 6px 10px;
             border-radius: 12px;
             background: var(--bg-card-soft);
@@ -96,7 +94,7 @@
             user-select: none;
         }
 
-        div#emojiList>span:hover {
+        div#smiliki>span:hover:not(#icon) {
             background-color: rgba(110, 168, 254, 0.24);
             border-radius: 8px;
             transform: translateY(-1px);
